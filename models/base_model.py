@@ -64,7 +64,7 @@ class BaseModel:
         if "updated_at" in obj_dict:
             obj_dict["updated_at"] = obj_dict["updated_at"].strftime(timeformat)
 
-        obj.dict["__class__"] = self.__class__.__name__
+        obj_dict["__class__"] = self.__class__.__name__
 
         return obj_dict
 
@@ -75,10 +75,3 @@ class BaseModel:
 
         return "[{:s}] ({:s}) {}".format(self.__class__.__name__, self.id, self.__dict__)
 
-my_model = BaseModel()
-my_model.name = "my first model"
-my_model.my_number = 89
-print(my_model)
-my_model.save()
-print(my_model)
-my_model_json = my_model.to_dict()
