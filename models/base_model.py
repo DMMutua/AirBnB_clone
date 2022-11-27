@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"Definations and implementation of the BaseModel class"
+"""Definations and implementation of the BaseModel class"""
 
 import uuid
 from datetime import datetime
@@ -24,26 +24,21 @@ class BaseModel:
         """
 
         if kwargs:
-
             for key, value in kwargs.items():
                 if key != "__class__":
                     setattr(self, key, value)
-
             if kwargs.get("created_at", None) and type(self.created_at) is str:
                 self.created_at = datetime.strptime(kwargs["created_at"], timeformat)
             else:
                 self.created_at = datetime.utcnow()
-
             if kwargs.get("updated_at", None) and type(self.updated_at) is str:
                 self.created_at = datetime.strptime(kwargs["created_at"], timeformat)
             else:
                 self.created_at = datetime.utcnow()
-        
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.utcnow()
             self.updated_at = self.created_at
-
 
     def save(self):
         """Updates the attribute `updated_at` of an object to the current date-time"""
@@ -74,4 +69,3 @@ class BaseModel:
         """
 
         return "[{:s}] ({:s}) {}".format(self.__class__.__name__, self.id, self.__dict__)
-
