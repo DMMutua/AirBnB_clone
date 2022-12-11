@@ -3,7 +3,7 @@
 import models
 from models.base_model import BaseModel
 
-class Amenity(BaseModel):
+class Review(BaseModel):
     """Representation of Review """
 
     def __init__(self, *args, **kwargs):

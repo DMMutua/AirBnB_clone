@@ -3,7 +3,7 @@
 import models
 from models.base_model import BaseModel
 
-class Place(BaseModel):
+class State(BaseModel):
     """Representation of State """
 
     def __init__(self, *args, **kwargs):
