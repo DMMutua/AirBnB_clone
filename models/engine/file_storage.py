@@ -47,3 +47,24 @@ class FileStorage:
                 self.new(eval(cls_name)(**o))
         except():
             pass
+
+    def delete(self, obj=None):
+        """Deleting obj from __objects if it exists there"""
+        if obj is not None:
+            key = obj.__class__.__name__ + '.' + obj.id
+            if key in self.__objects:
+                del self.__objects[key]
+
+    def close(self):
+        """Calling the reload() method for deserialization of JSON file to Objects"""
+        self.reload()
+
+    def get(self, cls, id):
+        """
+        Returning the object based on the class name and its ID,
+        or NONE if it is not found
+        """
+        if cls not in classes.values():
+            return None
+
+        all_cls = models.storage.all(cls)

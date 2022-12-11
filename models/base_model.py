@@ -69,3 +69,7 @@ class BaseModel:
         """
 
         return "[{:s}] ({:s}) {}".format(self.__class__.__name__, self.id, self.__dict__)
+
+    def delete(self):
+        """Deleting the current Instance from Storage"""
+        models.storage.delete(self)
