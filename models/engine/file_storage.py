@@ -8,7 +8,10 @@ In AirBNB_Clone; The FileStorage Class:
 
 import json
 
-
+classes = {
+"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
+           "Place": Place, "Review": Review, "State": State, "User": User
+}
 class FileStorage:
     """Implements Serializing Instances to JSON Files and Deserialization Back to Instances"""
 
@@ -68,3 +71,23 @@ class FileStorage:
             return None
 
         all_cls = models.storage.all(cls)
+        for value in all_cls.values():
+            if (value.id == id):
+                return value
+
+        return None
+
+    def count(self, cls=None):
+        """
+        Counting the Number of Objects in Storage
+        """
+        all_classes = classes.values()
+
+        if not cls:
+            count = 0
+            for a_clas in all_classes:
+                count += len(models.storage.all(a_clas).values())
+        else:
+            count = len(models.storage.all(cls).values())
+
+        return count
