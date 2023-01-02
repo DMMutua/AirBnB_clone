@@ -15,6 +15,7 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
+from os import path
 
 classes = {
 "Amenity": Amenity, "BaseModel": BaseModel, "City": City,
@@ -29,35 +30,45 @@ class FileStorage:
     __objects = {}
 
     def all(self):
-        """returning the dictionary __objects"""
+        """returning the dictionary `__objects`.
+        This Dictionary Stores all class Objects by `<class name>.id`
+        """
 
         return self.__objects
 
     def new(self, obj):
-        """sets in dictionary __objects the object with key <obj class name>.id"""
+        """sets in dictionary __objects the object with key <obj class name>.id
+        Args:
+            obj (inst): The Object being added in the `__objects` class attribute
+        """
         if obj is not None:
             key = obj.__class__.__name__ + "." + obj.id
             self.__objects[key] = obj
 
     def save(self):
-        """Serialization of __objects to the JSON file (filepath: __file_path)"""
-        json_objects = {}
-        for key in self.__objects:
-            json_objects[key] = self.__objects[key].to_dict()
-        with open(self.__file_path, 'w') as file_context:
-            json.dump(json_objects, file_context)
+        """Serialization of __objects to the JSON file (filepath: __file_path)
+        Conversion of contents of `__objects` into JSON Strings and
+        Loading to JSON File on `__file_path`
+        """
+        json_dictionary = {}
+        for key, value in self.__objects.items():
+            json_dictionary[key] = value.to_dict()
+
+        with open(self.__file_path, mode='w', encoding='utf-8') as file_context:
+            file_context.write(json.dumps(json_dictionary))
 
     def reload(self):
-        """Deserialization of the JSON file (filepath: __file_path) to __objects dictionary"""
-        try:
-            with open(self.__file_path, 'r') as file_context:
-                objdict = json.load(file_context)
-            for o in objdict.values():
-                cls_name = o["__class__"]
-                del o["__class__"]
-                self.new(eval(cls_name)(**o))
-        except():
-            pass
+        """Deserialization of the JSON file (filepath: __file_path) to __objects dictionary
+        If the file on `__file_path` class attribute exists, each object
+        on the file will be deserialized and appended to the `__objects`
+        class attribute like an instance with the object data.
+        """
+        if path.exists(self.__file_path):
+            with open(self.__file_path, mode='r', encoding='utf-8') as file_context:
+                json_dictionary = json.loads(file_context.read())
+
+                for key, value in json_dictionary.items():
+                    self.__objects[key] = eval(v['__class__'])(**value)
 
     def delete(self, obj=None):
         """Deleting obj from __objects if it exists there"""
