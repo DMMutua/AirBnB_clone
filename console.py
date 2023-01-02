@@ -10,34 +10,29 @@ import cmd
 
 class HBNBCommand(cmd.Cmd):
     """
-    The Command Processor Class to be Implemented for the CLI.
+    The Command Processor Class to be Implemented for the CLI Console
+    Intended for the AirBnB clone web application.
     """
+    prompt = "(hbnb) "
 
-    def __init__(self):
-        """Initializing the Command Line Interface Object from Class 
-        `HBNBCommand`
-        """
-        super().__init__()
-        #custom prompt
-        self.prompt = '(hbnb) '
-
-    def do_quit(self, line):
+    def do_quit(self, argv):
         """
         Quit Command to exit the program
         """
         return True
 
-    def do_EOF(self, line):
+    def do_EOF(self, argv):
         """
-        Quit Command: Exiting the Program
+        EOF Signal to Exit the program
         """
+        print("")
         return True
 
     def emptyline(self):
         """
         Ensures that the CLI instances of class `HBNBCommand`
-        return nothing when an empty line character is given 
-        as response to prompt. 
+        return nothing when an empty line character is given
+        as response to prompt.
         Overrides default `emptyline` behavior of repeating last
         nonempty command entered.
         """
