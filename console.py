@@ -4,6 +4,10 @@ This File Hosts the Source Code for the entry Point of the Command Line Interpre
 This Module Can Create, modify, and delete instances.
 """
 
+
+import cmd
+
+
 class HBNBCommand(cmd.Cmd):
     """
     The Command Processor Class to be Implemented for the CLI.
