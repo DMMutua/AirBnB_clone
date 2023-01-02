@@ -39,5 +39,5 @@ class HBNBCommand(cmd.Cmd):
 
 
 #Ensuring the program implemented in this file is executable except when Imported.
-if__name__ == '__main__':
+if __name__ == '__main__':
     HBNBCommand().cmdloop()
