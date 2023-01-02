@@ -12,8 +12,14 @@ class HBNBCommand(cmd.Cmd):
     """
     The Command Processor Class to be Implemented for the CLI.
     """
-    # A custom Prompt;
-    prompt = '(hbnb) '
+
+    def __init__(self):
+        """Initializing the Command Line Interface Object from Class 
+        `HBNBCommand`
+        """
+        super().__init__()
+        #custom prompt
+        self.prompt = '(hbnb) '
 
     def do_quit(self, line):
         """
