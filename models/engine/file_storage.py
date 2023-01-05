@@ -68,7 +68,7 @@ class FileStorage:
                 json_dictionary = json.loads(file_context.read())
 
                 for key, value in json_dictionary.items():
-                    self.__objects[key] = eval(v['__class__'])(**value)
+                    self.__objects[key] = eval(value['__class__'])(**value)
 
     def delete(self, obj=None):
         """Deleting obj from __objects if it exists there"""
