@@ -108,11 +108,11 @@ class HBNBCommand(cmd.Cmd):
             print('** instance id missing **')
         else:
             instance_key = command + '.' + arg
-            instance_data = models.storage.all().get(key)
+            instance_data = models.storage.all().get(instance_key)
             if inst_data is None:
                 print('** no instance found **')
             else:
-                del models.storage.all()[key]
+                del models.storage.all()[instance_key]
                 models.storage.save()
 
     def do_all(self, line):
