@@ -3,7 +3,7 @@
 
 import uuid
 from datetime import datetime
-import models
+
 
 timeformat = "%Y-%m-%dT%H:%M:%S.%f"
 
@@ -37,16 +37,18 @@ class BaseModel:
             else:
                 self.created_at = datetime.utcnow()
         else:
+            from models import storage
             self.id = str(uuid.uuid4())
             self.created_at = datetime.utcnow()
             self.updated_at = self.created_at
-            models.storage.new(self)
+            storage.new(self)
 
     def save(self):
         """Updates the attribute `updated_at` of an object to the current date-time"""
 
+        from models import storage
         self.updated_at = datetime.utcnow()
-        models.storage.save()
+        storage.save()
 
     def to_dict(self):
         """Returning the attribute dictionary of key/values  of a particular
@@ -75,4 +77,5 @@ class BaseModel:
 
     def delete(self):
         """Deleting the current Instance from Storage"""
-        models.storage.delete(self)
+        from models import storage
+        storage.delete(self)
