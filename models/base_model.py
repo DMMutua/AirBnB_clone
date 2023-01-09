@@ -50,23 +50,29 @@ class BaseModel:
         self.updated_at = datetime.utcnow()
         storage.save()
 
-    def to_dict(self):
+    def to_dict(self, save_fs = None):
         """Returning the attribute dictionary of key/values  of a particular
         instance of the BaseClass.
             the Attributes `created_at` and `updated_at` are returned as type `str`
             and in ISO format.
         """
-
-        obj_dict = self.__dict__.copy()
-        if "created_at" in obj_dict:
-            obj_dict["created_at"] = obj_dict["created_at"].strftime(timeformat)
+        new_dict = self.__dict__.copy()
+        if "created_at" in new_dict:
+            if isinstance(new_dict["created_at"], datetime):
+                new_dict["created_at"] = new_dict["created_at"].strftime("%Y-%m-%dT%H:%M:%S.%f")  # use strftime() to format the time
+        if "updated_at" in new_dict:
+            if isinstance(new_dict["updated_at"], datetime):
+                new_dict["updated_at"] = new_dict["updated_at"].strftime("%Y-%m-%dT%H:%M:%S.%f")  # use strftime() to format the time
         
-        if "updated_at" in obj_dict:
-            obj_dict["updated_at"] = obj_dict["updated_at"].strftime(timeformat)
+        new_dict["__class__"] = self.__class__.__name__
+        if "_sa_instance_state" in new_dict:
+            del new_dict["_sa_instance_state"]
+        if save_fs is None:
+            if "password" in new_dict:
+                del new_dict["password"]
+        
+        return new_dict
 
-        obj_dict["__class__"] = self.__class__.__name__
-
-        return obj_dict
 
     def __str__(self):
         """Returning the string representation of the objects of BaseClass.
