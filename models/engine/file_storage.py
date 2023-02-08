@@ -66,10 +66,9 @@ class FileStorage:
         """
         if path.exists(self.__file_path):
             with open(self.__file_path, mode='r', encoding='utf-8') as file_context:
-                json_dictionary = json.loads(file_context.read())
-
-                for key, value in json_dictionary.items():
-                    self.__objects[key] = eval(value['__class__'])(**value)
+                for key, value in (json.load(file_context)).items():
+                    value = eval(value["__class__"])(**value)
+                    self.__objects[key] = value
 
     def delete(self, obj=None):
         """Deleting obj from __objects if it exists there"""
