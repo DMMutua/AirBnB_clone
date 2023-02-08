@@ -5,6 +5,8 @@ This Module Can Create, modify, and delete instances.
 """
 
 
+import os
+import sys
 import cmd
 import models
 from models.base_model import BaseModel
@@ -15,6 +17,7 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 import shlex
+import re
 
 
 class HBNBCommand(cmd.Cmd):
@@ -53,7 +56,7 @@ Quit Command to exit the program
     def do_create(self, line):
         """
         Command to Create New Instance of `BaseModel`.
-        Saves it (to JSON FilePath: __file_path) and 
+        Saves it (to JSON FilePath: __file_path) and
         Prints the id of the instance of BaseModel
         Args:
             Line < **argv >: A line with the Arguments of an Allowed Class Name
@@ -63,6 +66,7 @@ Quit Command to exit the program
             print('** class name missing **')
         elif command not in self.list_of_classes:
             print("** class doesn't exist **")
+        
         else:
             new_object = eval(command)()
             new_object.save()
@@ -120,8 +124,8 @@ Quit Command to exit the program
         """
         Prints all string representation of all instances based or not on the class name.
         Args:
-            line < **argv >: A line with 1 Argument that should 
-                            Ideally be a Valid Class Name. 
+            line < **argv >: A line with 1 Argument that should
+                            Ideally be a Valid Class Name.
         """
         command = self.parseline(line)[0]
         objects = models.storage.all()
@@ -181,6 +185,37 @@ Quit Command to exit the program
                 print("** instance id missing **")
         else:
             print("** class doesn't exist **")
+
+    def default(self, line):
+        """
+        In Cases Where a Command Prefix is not recognized by the console,
+        This default method looks for whether the command entered has syntax:
+            "<class name>.<method name>" or otherwise.
+        If the Class and Method passed to the console exists, it links it to
+        corresponding method.
+        """
+        if '.' in line:
+            splitted_line = re.split(r'\.|\(|\)', line)
+            class_name = splitted_line[0]
+            method_name = splitted_line[1]
+
+            if class_name in self.list_of_classes:
+                if method_name == 'all':
+                    print(self.get_objects(class_name))
+                elif method_name == 'count':
+                    print(len(self.get_objects(class_name)))
+                elif method_name == 'show':
+                    class_id = splitted_line[2][1:-1]
+                    self.do_show(class_name + ' ' + class_id)
+                elif method_name == 'destroy':
+                    class_id = splitted_line[2][1:-1]
+                    self.do_delete(class_name + ' ' + class_id)
+
+    def do_clear(self, arg):
+        """Clears the Console Screen
+        Intended for use in a terminal or command prompt.
+        May Not Work As expected in other environments"""
+        os.system('cls' if os.name == 'nt' else 'clear')
 
 
 #Ensuring the program implemented in this file is executable except when Imported.
