@@ -186,6 +186,32 @@ Quit Command to exit the program
         else:
             print("** class doesn't exist **")
 
+    def get_objects(self, instance=''):
+        """Gets All Instances of Classes to the console
+
+        This method takes care of obtaining the information
+        of all the instances created in the file `objects.json`
+        that is used as the storage engine.
+        When an instance is sent as an argument, the function
+        takes care of getting only the instances that match the argument.
+        Args:
+            instance (:obj:`str`, optional): The instance to finds into
+                the objects.
+        Returns:
+            list: If the `instance` argument is not empty, it will search
+            only for objects that match the instance. Otherwise, it will show
+            all instances in the file where all objects are stored.
+
+        """
+        objects = models.storage.all()
+        
+        if instance:
+            keys = objects.keys()
+            return [str(value) for key, value in objects.items()
+                    if key.startswith(instance)]
+
+        return [str(value) for key, value in objects.items()]
+
     def default(self, line):
         """
         In Cases Where a Command Prefix is not recognized by the console,
@@ -209,7 +235,7 @@ Quit Command to exit the program
                     self.do_show(class_name + ' ' + class_id)
                 elif method_name == 'destroy':
                     class_id = splitted_line[2][1:-1]
-                    self.do_delete(class_name + ' ' + class_id)
+                    self.do_destroy(class_name + ' ' + class_id)
 
     def do_clear(self, arg):
         """Clears the Console Screen
