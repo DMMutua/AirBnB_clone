@@ -1,7 +1,10 @@
 #!/usr/bin/python
 """The Class User"""
+
+
 import models
 from models.base_model import BaseModel
+
 
 class User(BaseModel):
     """Representation of User """
@@ -16,4 +19,3 @@ class User(BaseModel):
         Variable Arguments
         """
         super().__init__(self, *args, **kwargs)
-
